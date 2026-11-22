@@ -10,7 +10,7 @@ M_LIST = [5, 10, 15, 20, 25]
 N_REPEATS = 5
 N_PAIRS = 10000
 N_DRAWS_E = 20
-SEED = 0
+SEED = 42
 OUT_DIR = "results"
 BASELINE_PATH = os.path.join(OUT_DIR, "baseline_a.npz")
 RUNS_PATH = os.path.join(OUT_DIR, "runs_b_c_d.csv")
@@ -53,7 +53,7 @@ def project(X, A): #E = X A^T
 
 
 def run_kmeans(X, seed):
-    return KMeans(n_clusters=K, n_init=N_INIT, random_state=seed).fit(X)
+    return KMeans(n_clusters=K, n_init=N_INIT, random_state=42).fit(X)
 
 def get_baseline(D, force=False):
     if os.path.exists(BASELINE_PATH) and not force:
@@ -61,7 +61,7 @@ def get_baseline(D, force=False):
         return dict(B=z["B"], labels=z["labels"],
                     cost_D=float(z["cost_D"]), time_D=float(z["time_D"]))
     t0 = time.perf_counter()
-    km = run_kmeans(D, SEED)
+    km = run_kmeans(D, 42)
     time_D = time.perf_counter()-t0
     B = km.cluster_centers_
     cost_D = cost(D, B)
