@@ -11,7 +11,7 @@ caches results in ./results_lr:
   runs_b_c.csv     the 5 x 7 sketched runs         (shared by b and c)
 """
 
-SEED=0
+SEED=42
 OUT_DIR="results_lr"
 M_LIST=[50, 100, 200, 500, 1000, 2000, 5000]
 N_REPEATS=5
