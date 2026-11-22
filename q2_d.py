@@ -1,9 +1,13 @@
 import matplotlib.pyplot as plt
 from q2_helper import *
+import random
+import numpy as np
+random.seed(42)
+np.random.seed(42)
 
 """
-lr_d.py  for d residual of the full solution v = D b - y. For m in set 50, 500, 5000 we draw 100
-independent CountSketches and compute ||S v||^2 / ||v||^2 additionally histogram, mean and std for each m.
+lr_d.py  for d residual of the full solution v = Db-y. For m in set 50 500 5000 we draw 100
+independent countsketches and compute ||S v||^2 / ||v||^2 additionally histogram, mean and std for each m.
 """
 
 M_D=[50, 500, 5000]
