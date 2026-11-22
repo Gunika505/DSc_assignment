@@ -1,13 +1,17 @@
 import matplotlib.pyplot as plt
 from q2_helper import *
+import random
+import numpy as np
+random.seed(42)
+np.random.seed(42)
 """
-lr_c.py  for c Time to draw S, forming SD and Sy and computing a bar, averaged over the 5 runs we got from b and then finally compared
+lr_c.py  for c time to draw S, forming SD and Sy and computing a bar, averaged over the 5 runs we got from b and then finally compared
 with the time to compute b in part a
 """
 
 D, target=load_data()
 baseline=get_baseline(D, target)
-res=get_runs(D, target)                     # same 35 runs as part (b)
+res=get_runs(D, target)                     
 
 req_table=res.groupby("m").agg(time_mean=("time", "mean"), time_min=("time", "min"),
                                  time_max=("time", "max")).reset_index()
