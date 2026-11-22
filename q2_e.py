@@ -50,4 +50,6 @@ req_table=results.groupby("method").agg(time_sketch_mean=("time_sketch","mean"),
 req_table.to_csv(os.path.join(OUT_DIR,"table_e.csv"),index=False)
 print("\nAll repetitions:")
 print(results.to_string(index=False,float_format=lambda v:f"{v:.5g}"))
-print("\nMean over 5 repetitions (time = draw S +")
+print("\nMean over 5 repetitions (time = draw S + form SD', Sy'):")
+print(req_table.to_string(index=False, float_format=lambda v: f"{v:.5g}"))
+print(f"\nSaved: {OUT_DIR}/runs_e.csv, table_e.csv")
