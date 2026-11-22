@@ -1,7 +1,11 @@
 from q2_helper import *
+import random
+import numpy as np
+random.seed(42)
+np.random.seed(42)
 """
 lr_e.py  for e subset of 50,000 rows that are chosen once with a fixed seed and m = 500
-then we sketch (D', y') with firstly, CountSketch and then secondly with a dense Gaussian S with N(0, 1/m) entries
+then we sketch (D', y') with firstly, countSketch and then secondly with a dense gaussian S with N(0, 1/m) entries
 for each m time to draw S and form SD', Sy', and Loss(D',y',a~) / Loss(D',y',b'), mean of 5 fresh sketches.
 """
 
@@ -49,6 +53,4 @@ req_table=results.groupby("method").agg(time_sketch_mean=("time_sketch", "mean")
 req_table.to_csv(os.path.join(OUT_DIR, "table_e.csv"), index=False)
 print("\nAll repetitions:")
 print(results.to_string(index=False, float_format=lambda v: f"{v:.5g}"))
-print("\nMean over 5 repetitions (time = draw S + form SD', Sy'):")
-print(req_table.to_string(index=False, float_format=lambda v: f"{v:.5g}"))
-print(f"\nSaved: {OUT_DIR}/runs_e.csv, table_e.csv")
+print("\nMean over 5 repetitions (time = draw S +
