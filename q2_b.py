@@ -24,7 +24,7 @@ print(res[["m", "run", "loss", "ratio", "sketched_loss"]].to_string(index=False,
 print("\nPer m:")
 print(req_table.to_string(index=False, float_format=lambda v: f"{v:.5g}"))
 
-# log-log plot: mean ratio, error bars = smallest / largest of the 5 ratios
+#log-log plot
 mean=req_table["ratio_mean"].values
 err=np.vstack([mean - req_table["ratio_min"].values, req_table["ratio_max"].values - mean])
 fig, ax=plt.subplots(figsize=(6.5, 4.5))
@@ -37,7 +37,7 @@ ax.set_title("(b) CountSketch regression: mean ratio, bars = min/max of 5")
 ax.legend(); fig.tight_layout()
 fig.savefig(os.path.join(OUT_DIR, "fig_b_ratio.png"), dpi=150); plt.close(fig)
 
-# sketched loss vs m (helps to describe the behaviour below / above rank(D))
+#sketched loss vs m
 fig, ax=plt.subplots(figsize=(6.5, 4.5))
 ax.plot(req_table["m"], req_table["sketched_mean"], "o-", label=r"mean sketched loss $\|SD\tilde a - Sy\|^2$")
 ax.axhline(baseline["loss_b"], color="k", ls="--", lw=1, label="Loss(D, target, b)")
