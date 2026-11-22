@@ -1,10 +1,4 @@
-"""
-part_e.py  -  (e) For each m:
-  (i)  one draw of A: ||E_i - E_l||^2 / ||D_i - D_l||^2 on 10^4 random pairs with D_i != D_l
-       (same pairs for every m)
-  (ii) 20 independent draws of A: cost_E(C_D) / cost_D(C_D) for the clusters C_D from part (a)
-Box plots of (i) and (ii) against m in one figure.
-"""
+#q1 part (e)-pairwise distance ratio vs clustering cost ratio
 import matplotlib.pyplot as plt
 from q1_helper import *
 
@@ -13,32 +7,29 @@ n, d = D.shape
 base = get_baseline(D)
 labels_D = base["labels"]
 
-# ---- 10^4 random pairs with D_i != D_l, fixed for all m ----
-rng_pairs = np.random.default_rng([SEED, 999])
-cand = rng_pairs.integers(0, n, size=(8 * N_PAIRS, 2))
-diff = D[cand[:, 0]].astype(np.float64) - D[cand[:, 1]].astype(np.float64)
+rand_pairs = np.random.default_rng([SEED, 999])
+candidate = rand_pairs.integers(0, n, size=(8 * N_PAIRS, 2)) #8x oversampling to ensure enough distinct pairs
+diff = D[candidate[:, 0]].astype(np.float64) - D[candidate[:, 1]].astype(np.float64)
 dist2_D = (diff ** 2).sum(1)
-ok = (cand[:, 0] != cand[:, 1]) & (dist2_D > 0)      # many KDD rows are duplicates
+ok = (candidate[:, 0] != candidate[:, 1]) & (dist2_D > 0)
 assert ok.sum() >= N_PAIRS, "not enough distinct pairs; increase the oversampling factor"
-pair_diff = diff[ok][:N_PAIRS].astype(np.float32)    # D_i - D_l
+pair_diff = diff[ok][:N_PAIRS].astype(np.float32) #remove duplicates and zero distances
 pair_d2 = dist2_D[ok][:N_PAIRS]
 
-costD_CD = partition_cost(D, labels_D)               # cost_D(C_D)
-
+costD_CD = partition_cost(D, labels_D)
 pair_ratios, cost_ratios = {}, {}
 for m in M_LIST:
-    # (i) one draw of A
-    A = draw_A(m, d, np.random.default_rng([SEED, m, 1000]))
-    diffE = pair_diff @ A.astype(np.float32).T       # = E_i - E_l
-    pair_ratios[m] = (diffE.astype(np.float64) ** 2).sum(1) / pair_d2
+    A=draw_A(m, d, np.random.default_rng([SEED, m, 1000]))
+    diffE=pair_diff @ A.astype(np.float32).T
+    pair_ratios[m]=(diffE.astype(np.float64) ** 2).sum(1)/pair_d2
 
-    # (ii) 20 independent draws
-    vals = []
+    #independent draws of A for cost ratio
+    vals=[]
     for t in range(N_DRAWS_E):
-        A = draw_A(m, d, np.random.default_rng([SEED, m, 2000 + t]))
-        E = project(D, A)
+        A=draw_A(m, d, np.random.default_rng([SEED, m, 2000 + t]))
+        E=project(D, A)
         vals.append(partition_cost(E, labels_D) / costD_CD)
-    cost_ratios[m] = np.array(vals)
+    cost_ratios[m]=np.array(vals)
     print(f"m={m:2d}  (i) pairs: mean={pair_ratios[m].mean():.3f} sd={pair_ratios[m].std():.3f} | "
           f"(ii) cost: mean={cost_ratios[m].mean():.3f} sd={cost_ratios[m].std():.3f}")
 
@@ -54,7 +45,7 @@ spread = pd.DataFrame({
 spread.to_csv(os.path.join(OUT_DIR, "table_e.csv"), index=False)
 print("\n" + spread.to_string(index=False, float_format=lambda v: f"{v:.4f}"))
 
-# ---- one figure, two box plots per m ----
+#box plots
 fig, ax = plt.subplots(figsize=(9, 5))
 pos = np.arange(len(M_LIST)) * 3.0
 b1 = ax.boxplot([pair_ratios[m] for m in M_LIST], positions=pos - 0.5, widths=0.8,
