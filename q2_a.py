@@ -1,6 +1,10 @@
 from q2_helper import *
+import random
+import numpy as np
+random.seed(42)
+np.random.seed(42)
 """
-lr_a.py - (a) Full least squares solution: b = argmin ||D a - target||^2,
+lr_a.py for a full least squares solution: b = argmin ||D a - target||^2,
 computed using numpy.linalg.lstsq. Reports Loss(D, target, b), the computation
 time for b, and rank(D) which is needed for b part.
 """
