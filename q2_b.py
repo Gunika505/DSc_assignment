@@ -1,8 +1,12 @@
 import matplotlib.pyplot as plt
 from q2_helper import *
+import random
+import numpy as np
+random.seed(42)
+np.random.seed(42)
 """
-lr_b.py foe (b) CountSketch regression for m = 50,...,5000, using 5
-independent sketches for each m. Reports Loss(D,y,a~) and its ratio to
+lr_b.py foe b countSketch regression for m = 50 till 5000, using 5
+independent sketches for each m then reporting Loss(D,y,a~) and its ratio to
 Loss(D,y,b) and the sketched loss ||S D a~ - S y||^2 then finally plots the mean loss ratio on a log-log scale with min/max error bars.
 """
 
